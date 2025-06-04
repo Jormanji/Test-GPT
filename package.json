@@ -1,0 +1,9 @@
+{
+  "name": "pong-mvc",
+  "version": "1.0.0",
+  "description": "Simple Pong game using MVC structure with Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
