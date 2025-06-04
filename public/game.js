@@ -11,8 +11,11 @@ let aiY = playerY;
 const ballSize = 10;
 let ballX = canvas.width / 2;
 let ballY = canvas.height / 2;
-let ballSpeedX = 5;
-let ballSpeedY = 2;
+const INITIAL_SPEED_X = 5;
+const INITIAL_SPEED_Y = 2;
+let ballSpeedX = INITIAL_SPEED_X;
+let ballSpeedY = INITIAL_SPEED_Y;
+const SPEED_UP = 1.05; // ball accelerates slightly on each paddle hit
 
 canvas.addEventListener('mousemove', (e) => {
   const rect = canvas.getBoundingClientRect();
@@ -35,7 +38,8 @@ function drawCircle(x, y, r, color) {
 function resetBall() {
   ballX = canvas.width / 2;
   ballY = canvas.height / 2;
-  ballSpeedX = -ballSpeedX;
+  ballSpeedX = -Math.sign(ballSpeedX) * INITIAL_SPEED_X;
+  ballSpeedY = Math.sign(ballSpeedY) * INITIAL_SPEED_Y;
 }
 
 function update() {
@@ -48,12 +52,14 @@ function update() {
 
   // player paddle
   if (ballX < playerX + paddleWidth && ballY > playerY && ballY < playerY + paddleHeight) {
-    ballSpeedX = -ballSpeedX;
+    ballSpeedX = -ballSpeedX * SPEED_UP;
+    ballSpeedY *= SPEED_UP;
   }
 
   // ai paddle
   if (ballX > aiX - ballSize && ballY > aiY && ballY < aiY + paddleHeight) {
-    ballSpeedX = -ballSpeedX;
+    ballSpeedX = -ballSpeedX * SPEED_UP;
+    ballSpeedY *= SPEED_UP;
   }
 
   if (ballX < 0 || ballX > canvas.width) {

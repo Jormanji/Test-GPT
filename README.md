@@ -1,6 +1,7 @@
 # Pong MVC Example
 
 This repository contains a very small website that demonstrates a simple MVC (Model-View-Controller) structure using Node.js built-in modules. The website serves a basic Pong game implemented in JavaScript.
+Each time the ball hits a paddle, it speeds up slightly to keep the rally exciting.
 
 ## Structure
 - `server.js` – minimal HTTP server and router
