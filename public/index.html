@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AP Service Finder</title>
+</head>
+<body>
+  <h1>AP Service Finder</h1>
+  <form id="searchForm">
+    <input type="text" name="address" placeholder="Enter address" required>
+    <button type="submit">Search</button>
+  </form>
+  <div id="results"></div>
+  <script>
+    const form = document.getElementById('searchForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const address = form.address.value;
+      const res = await fetch(`/search?address=${encodeURIComponent(address)}`);
+      const data = await res.json();
+      const resultsDiv = document.getElementById('results');
+      if (data.error) {
+        resultsDiv.textContent = data.error;
+        return;
+      }
+      resultsDiv.innerHTML = '<h2>Results:</h2>' +
+        '<ul>' + data.map(p => `<li>${p.name} - ${p.address} (${p.hours.toFixed(2)} hrs)</li>`).join('') + '</ul>';
+    });
+  </script>
+</body>
+</html>

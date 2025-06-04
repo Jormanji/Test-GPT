@@ -1,21 +1,31 @@
-# Pong MVC Example
+# AP Service Finder
 
-This repository contains a very small website that demonstrates a simple MVC (Model-View-Controller) structure using Node.js built-in modules. The website serves a basic Pong game implemented in JavaScript.
+This simple Node.js application allows you to search for AP service providers within approximately one hour of driving time from a given address. Providers are listed in `data/providers.json` and can be edited manually.
 
-## Structure
-- `server.js` – minimal HTTP server and router
-- `controllers/` – request handlers
-- `models/` – data layer
-- `views/` – HTML templates
-- `public/` – static assets (CSS and game script)
+The server relies on the Mapbox API for geocoding and driving time calculations.
 
-## Running
+## Setup
 
-1. Ensure you have Node.js installed.
-2. Run the server:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Obtain a Mapbox access token and set it as an environment variable:
+   ```bash
+   export MAPBOX_TOKEN=your_token_here
+   ```
+3. Add providers to `data/providers.json` in the following format:
+   ```json
+   [
+     {"name": "Provider Name", "address": "123 Main St, City, State"}
+   ]
+   ```
+4. Start the server:
+   ```bash
+   npm start
+   ```
+5. Open `http://localhost:3000` in your browser and enter an address to search.
 
-```bash
-node server.js
-```
+## Notes
 
-3. Open `http://localhost:3000` in your browser to play Pong.
+The Mapbox API is used for geocoding and routing. Requests to these APIs count against your quota and require internet access.
