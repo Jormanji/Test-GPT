@@ -10,6 +10,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
+const MONTHLY_LIMIT = parseInt(process.env.MAPBOX_MONTHLY_LIMIT || '100000', 10);
+let monthlyCount = 0;
+let month = new Date().getUTCMonth();
+
+function checkUsage() {
+  const now = new Date();
+  if (now.getUTCMonth() !== month) {
+    month = now.getUTCMonth();
+    monthlyCount = 0;
+  }
+  if (monthlyCount >= MONTHLY_LIMIT) {
+    throw new Error('Search temporarily disabled, monthly usage limit reached.');
+  }
+  if (monthlyCount >= Math.floor(MONTHLY_LIMIT * 0.9)) {
+    console.warn('Warning: 90% of monthly Mapbox limit reached');
+  }
+  monthlyCount++;
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -20,6 +38,7 @@ async function loadProviders() {
 }
 
 async function geocode(address) {
+  checkUsage();
   const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_TOKEN}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Geocoding failed');
@@ -30,6 +49,7 @@ async function geocode(address) {
 }
 
 async function drivingHours(start, end) {
+  checkUsage();
   const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.lon},${start.lat};${end.lon},${end.lat}?access_token=${MAPBOX_TOKEN}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Directions request failed');

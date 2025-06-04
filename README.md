@@ -14,6 +14,10 @@ The server relies on the Mapbox API for geocoding and driving time calculations.
    ```bash
    export MAPBOX_TOKEN=your_token_here
    ```
+   Optionally set a monthly request limit:
+   ```bash
+   export MAPBOX_MONTHLY_LIMIT=100000
+   ```
 3. Add providers to `data/providers.json` in the following format:
    ```json
    [
@@ -28,4 +32,4 @@ The server relies on the Mapbox API for geocoding and driving time calculations.
 
 ## Notes
 
-The Mapbox API is used for geocoding and routing. Requests to these APIs count against your quota and require internet access.
+The Mapbox API is used for geocoding and routing. Requests to these APIs count against your quota and require internet access. Set `MAPBOX_MONTHLY_LIMIT` to cap usage. When the limit is reached, searches are disabled until the next month.
